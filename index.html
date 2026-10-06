@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NihonAI Study App</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0d1117;
+  color: #f5f7fa;
+  min-height: 100vh;
+}
+
+header {
+  padding: 22px 18px;
+  text-align: center;
+  border-bottom: 1px solid #252b35;
+  background: #11161e;
+}
+
+header h1 {
+  font-size: 28px;
+}
+
+header p {
+  color: #9ca3af;
+  margin-top: 7px;
+}
+
+nav {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 12px;
+  background: #11161e;
+  border-bottom: 1px solid #252b35;
+}
+
+nav button {
+  white-space: nowrap;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 15px;
+  background: #222936;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #323b4c;
+}
+
+button.active {
+  background: #5865f2;
+}
+
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 18px;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+.card {
+  background: #161c25;
+  border: 1px solid #252d38;
+  border-radius: 17px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.hero {
+  padding: 24px;
+  border-radius: 20px;
+  background: #171e29;
+  margin-bottom: 18px;
+}
+
+.hero h2 {
+  margin-bottom: 8px;
+}
+
+.muted {
+  color: #9ca3af;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.stat {
+  background: #161c25;
+  border: 1px solid #252d38;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 23px;
+  margin-bottom: 4px;
+}
+
+.progress {
+  height: 11px;
+  background: #292f39;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #5865f2;
+  transition: width .4s;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+.course {
+  background: #161c25;
+  border: 1px solid #252d38;
+  padding: 20px;
+  border-radius: 17px;
+}
+
+.course h3 {
+  margin-bottom: 8px;
+}
+
+.course p {
+  color: #aab1bd;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.lesson {
+  background: #161c25;
+  border: 1px solid #252d38;
+  padding: 22px;
+  border-radius: 17px;
+  margin-bottom: 15px;
+}
+
+.lesson h2 {
+  margin-bottom: 15px;
+}
+
+.lesson h3 {
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
+.lesson p {
+  color: #c4cad4;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.kana {
+  text-align: center;
+  font-size: 60px;
+  margin: 20px;
+}
+
+.vocab {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.vocab div {
+  background: #202632;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.quiz-question {
+  font-size: 20px;
+  margin: 15px 0;
+}
+
+.answers {
+  display: grid;
+  gap: 10px;
+}
+
+.answer {
+  text-align: left;
+  background: #222936;
+}
+
+.correct {
+  background: #176b45 !important;
+}
+
+.wrong {
+  background: #8b3030 !important;
+}
+
+.badge {
+  display: inline-block;
+  background: #252d3a;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.level {
+  font-size: 14px;
+  color: #aeb5c0;
+  margin-top: 8px;
+}
+
+.reset {
+  margin-top: 20px;
+  background: #572c35;
+}
+
+@media(max-width:600px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .vocab {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🇯🇵 NihonAI 🤖</h1>
+  <p>Learn Japanese + AI</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('home',this)">🏠 Home</button>
+  <button onclick="showPage('japanese',this)">🇯🇵 Japanese</button>
+  <button onclick="showPage('ai',this)">🤖 AI Course</button>
+  <button onclick="showPage('quiz',this)">🧠 Quiz</button>
+  <button onclick="showPage('profile',this)">👤 Progress</button>
+</nav>
+
+<main>
+
+<!-- HOME -->
+
+<section id="home" class="section active">
+
+  <div class="hero">
+
+    <h2>Welcome back 👋</h2>
+
+    <p class="muted">
+      Build your Japanese and AI skills one day at a time.
+    </p>
+
+    <div class="level">
+      Level <span id="level">1</span>
+      • <span id="xp">0</span> XP
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar" id="xpBar"></div>
+    </div>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <strong id="homeXP">0</strong>
+      XP
+    </div>
+
+    <div class="stat">
+      <strong id="homeStreak">1</strong>
+      🔥 Streak
+    </div>
+
+    <div class="stat">
+      <strong id="homeLessons">0</strong>
+      Lessons
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="course-grid">
+
+    <div class="course">
+
+      <span class="badge">JLPT N5</span>
+
+      <h3>🇯🇵 Japanese</h3>
+
+      <p>
+        Hiragana → vocabulary → particles →
+        grammar → sentences.
+      </p>
+
+      <button onclick="showPage('japanese')">
+        Continue Japanese
+      </button>
+
+    </div>
+
+    <div class="course">
+
+      <span class="badge">Beginner → Advanced</span>
+
+      <h3>🤖 AI</h3>
+
+      <p>
+        AI fundamentals → Python → ML →
+        deep learning → LLMs.
+      </p>
+
+      <button onclick="showPage('ai')">
+        Continue AI
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- JAPANESE -->
+
+<section id="japanese" class="section">
+
+  <div class="lesson">
+
+    <span class="badge">JLPT N5 • Lesson 1</span>
+
+    <h2>Hiragana Basics</h2>
+
+    <p>
+      Hiragana is one of the main Japanese writing systems.
+      Start by learning the basic sounds.
+    </p>
+
+    <div class="vocab">
+
+      <div>あ — a</div>
+      <div>い — i</div>
+      <div>う — u</div>
+      <div>え — e</div>
+      <div>お — o</div>
+
+    </div>
+
+    <br>
+
+    <button onclick="completeLesson('japanese1')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">JLPT N5 • Lesson 2</span>
+
+    <h2>Basic Greetings</h2>
+
+    <div class="vocab">
+
+      <div>
+        こんにちは<br>
+        <span class="muted">Konnichiwa — Hello</span>
+      </div>
+
+      <div>
+        ありがとう<br>
+        <span class="muted">Arigatou — Thank you</span>
+      </div>
+
+      <div>
+        おはよう<br>
+        <span class="muted">Ohayou — Good morning</span>
+      </div>
+
+      <div>
+        こんばんは<br>
+        <span class="muted">Konbanwa — Good evening</span>
+      </div>
+
+    </div>
+
+    <br>
+
+    <button onclick="completeLesson('japanese2')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">JLPT N5 • Lesson 3</span>
+
+    <h2>Introducing Yourself</h2>
+
+    <p>
+      わたしは プリティシュ です。
+    </p>
+
+    <p>
+      Watashi wa Puritishu desu.
+    </p>
+
+    <p>
+      Meaning: I am Prithwish.
+    </p>
+
+    <p>
+      The pattern is:
+      <strong>わたしは ___ です。</strong>
+    </p>
+
+    <button onclick="completeLesson('japanese3')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">JLPT N5 • Lesson 4</span>
+
+    <h2>Particle は</h2>
+
+    <p>
+      は is pronounced "wa" when used as a particle.
+    </p>
+
+    <p>
+      Example:
+    </p>
+
+    <p>
+      わたしは インドじんです。
+    </p>
+
+    <p>
+      I am Indian.
+    </p>
+
+    <button onclick="completeLesson('japanese4')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- AI -->
+
+<section id="ai" class="section">
+
+  <div class="lesson">
+
+    <span class="badge">AI • Level 1</span>
+
+    <h2>What is Artificial Intelligence?</h2>
+
+    <p>
+      Artificial Intelligence is a field of computer science
+      concerned with building systems that can perform tasks
+      that normally require aspects of human intelligence.
+    </p>
+
+    <p>
+      Examples include language understanding,
+      image recognition, prediction and generation.
+    </p>
+
+    <button onclick="completeLesson('ai1')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">AI • Level 2</span>
+
+    <h2>Machine Learning</h2>
+
+    <p>
+      Machine Learning allows computers to learn patterns
+      from data and use those patterns to make predictions
+      or decisions.
+    </p>
+
+    <p>
+      Instead of manually writing every rule,
+      we give the computer examples.
+    </p>
+
+    <button onclick="completeLesson('ai2')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">AI • Level 3</span>
+
+    <h2>Neural Networks</h2>
+
+    <p>
+      Neural networks are computational models inspired
+      loosely by the way biological neurons process information.
+    </p>
+
+    <p>
+      They contain connected units that transform input data
+      through layers.
+    </p>
+
+    <button onclick="completeLesson('ai3')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">AI • Level 4</span>
+
+    <h2>Deep Learning</h2>
+
+    <p>
+      Deep learning uses neural networks with multiple layers
+      to learn complex patterns.
+    </p>
+
+    <p>
+      It is widely used in computer vision,
+      speech recognition and language systems.
+    </p>
+
+    <button onclick="completeLesson('ai4')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">AI • Level 5</span>
+
+    <h2>Large Language Models</h2>
+
+    <p>
+      Large Language Models process sequences of tokens
+      and learn statistical patterns in language.
+    </p>
+
+    <p>
+      Modern LLMs commonly use Transformer architectures.
+    </p>
+
+    <button onclick="completeLesson('ai5')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">AI • Level 6</span>
+
+    <h2>AI Engineering</h2>
+
+    <p>
+      AI engineering combines programming, data,
+      machine learning models, APIs and software engineering
+      to build useful AI applications.
+    </p>
+
+    <p>
+      Example projects include AI tutors, document assistants,
+      recommendation systems and intelligent automation.
+    </p>
+
+    <button onclick="completeLesson('ai6')">
+      ✓ Complete Lesson +25 XP
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- QUIZ -->
+
+<section id="quiz" class="section">
+
+  <div class="lesson">
+
+    <span class="badge">Japanese Quiz</span>
+
+    <h2>Question 1</h2>
+
+    <div class="quiz-question">
+      What does ありがとう mean?
+    </div>
+
+    <div class="answers">
+
+      <button class="answer"
+        onclick="quizAnswer(this,false)">
+        Hello
+      </button>
+
+      <button class="answer"
+        onclick="quizAnswer(this,true)">
+        Thank you
+      </button>
+
+      <button class="answer"
+        onclick="quizAnswer(this,false)">
+        Good night
+      </button>
+
+      <button class="answer"
+        onclick="quizAnswer(this,false)">
+        Japan
+      </button>
+
+    </div>
+
+    <p id="quizResult"></p>
+
+  </div>
+
+
+  <div class="lesson">
+
+    <span class="badge">AI Quiz</span>
+
+    <h2>Question 2</h2>
+
+    <div class="quiz-question">
+      What does Machine Learning primarily learn from?
+    </div>
+
+    <div class="answers">
+
+      <button class="answer"
+        onclick="quizAI(this,false)">
+        Only manually written rules
+      </button>
+
+      <button class="answer"
+        onclick="quizAI(this,true)">
+        Data and examples
+      </button>
+
+      <button class="answer"
+        onclick="quizAI(this,false)">
+        Electricity
+      </button>
+
+      <button class="answer"
+        onclick="quizAI(this,false)">
+        Nothing
+      </button>
+
+    </div>
+
+    <p id="aiQuizResult"></p>
+
+  </div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="profile" class="section">
+
+  <div class="lesson">
+
+    <h2>👤 Your Progress</h2>
+
+    <p>
+      Level: <strong id="profileLevel">1</strong>
+    </p>
+
+    <p>
+      XP: <strong id="profileXP">0</strong>
+    </p>
+
+    <p>
+      Lessons completed:
+      <strong id="profileLessons">0</strong>
+    </p>
+
+    <p>
+      Current streak:
+      🔥 <strong id="profileStreak">1</strong> days
+    </p>
+
+    <div class="progress">
+      <div class="progress-bar" id="profileBar"></div>
+    </div>
+
+    <br>
+
+    <p class="muted">
+      Every 100 XP = 1 level.
+    </p>
+
+    <button class="reset" onclick="resetProgress()">
+      Reset Progress
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<script>
+
+/* =========================
+   SAVED PLAYER DATA
+========================= */
+
+let data = JSON.parse(
+  localStorage.getItem("nihonAI")
+) || {
+
+  xp: 0,
+
+  lessons: 0,
+
+  streak: 1,
+
+  completed: [],
+
+  lastVisit: null
+
+};
+
+
+/* =========================
+   STREAK
+========================= */
+
+function updateStreak() {
+
+  const today =
+    new Date().toISOString().split("T")[0];
+
+  if (!data.lastVisit) {
+
+    data.lastVisit = today;
+
+  } else if (data.lastVisit !== today) {
+
+    const last =
+      new Date(data.lastVisit);
+
+    const now =
+      new Date(today);
+
+    const difference =
+      Math.floor(
+        (now - last) /
+        (1000 * 60 * 60 * 24)
+      );
+
+    if (difference === 1) {
+
+      data.streak++;
+
+    } else if (difference > 1) {
+
+      data.streak = 1;
+
+    }
+
+    data.lastVisit = today;
+  }
+
+  save();
+}
+
+
+/* =========================
+   LEVEL
+========================= */
+
+function getLevel() {
+
+  return Math.floor(data.xp / 100) + 1;
+
+}
+
+
+/* =========================
+   ADD XP
+========================= */
+
+function addXP(amount) {
+
+  data.xp += amount;
+
+  save();
+
+  updateUI();
+
+}
+
+
+/* =========================
+   COMPLETE LESSON
+========================= */
+
+function completeLesson(id) {
+
+  if (data.completed.includes(id)) {
+
+    alert("You already completed this lesson!");
+
+    return;
+
+  }
+
+  data.completed.push(id);
+
+  data.lessons++;
+
+  data.xp += 25;
+
+  save();
+
+  updateUI();
+
+  alert("Lesson completed! +25 XP 🎉");
+
+}
+
+
+/* =========================
+   QUIZ
+========================= */
+
+function quizAnswer(button, correct) {
+
+  if (correct) {
+
+    button.classList.add("correct");
+
+    document.getElementById(
+      "quizResult"
+    ).textContent =
+      "✅ Correct! +20 XP";
+
+    data.xp += 20;
+
+  } else {
+
+    button.classList.add("wrong");
+
+    document.getElementById(
+      "quizResult"
+    ).textContent =
+      "❌ Not quite. Try again.";
+
+  }
+
+  save();
+
+  updateUI();
+
+}
+
+
+function quizAI(button, correct) {
+
+  if (correct) {
+
+    button.classList.add("correct");
+
+    document.getElementById(
+      "aiQuizResult"
+    ).textContent =
+      "✅ Correct! +20 XP";
+
+    data.xp += 20;
+
+  } else {
+
+    button.classList.add("wrong");
+
+    document.getElementById(
+      "aiQuizResult"
+    ).textContent =
+      "❌ Not quite. Try again.";
+
+  }
+
+  save();
+
+  updateUI();
+
+}
+
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function showPage(id, button) {
+
+  document
+    .querySelectorAll(".section")
+    .forEach(section => {
+
+      section.classList.remove("active");
+
+    });
+
+  document
+    .getElementById(id)
+    .classList.add("active");
+
+
+  if (button) {
+
+    document
+      .querySelectorAll("nav button")
+      .forEach(btn => {
+
+        btn.classList.remove("active");
+
+      });
+
+    button.classList.add("active");
+
+  }
+
+}
+
+
+/* =========================
+   UPDATE UI
+========================= */
+
+function updateUI() {
+
+  const level = getLevel();
+
+  const xpIntoLevel =
+    data.xp % 100;
+
+  document.getElementById(
+    "level"
+  ).textContent = level;
+
+  document.getElementById(
+    "xp"
+  ).textContent = data.xp;
+
+  document.getElementById(
+    "homeXP"
+  ).textContent = data.xp;
+
+  document.getElementById(
+    "homeStreak"
+  ).textContent = data.streak;
+
+  document.getElementById(
+    "homeLessons"
+  ).textContent = data.lessons;
+
+  document.getElementById(
+    "profileLevel"
+  ).textContent = level;
+
+  document.getElementById(
+    "profileXP"
+  ).textContent = data.xp;
+
+  document.getElementById(
+    "profileLessons"
+  ).textContent = data.lessons;
+
+  document.getElementById(
+    "profileStreak"
+  ).textContent = data.streak;
+
+
+  document.getElementById(
+    "xpBar"
+  ).style.width =
+    xpIntoLevel + "%";
+
+
+  document.getElementById(
+    "profileBar"
+  ).style.width =
+    xpIntoLevel + "%";
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+function save() {
+
+  localStorage.setItem(
+    "nihonAI",
+    JSON.stringify(data)
+  );
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetProgress() {
+
+  if (
+    confirm(
+      "Are you sure you want to reset all progress?"
+    )
+  ) {
+
+    localStorage.removeItem("nihonAI");
+
+    location.reload();
+
+  }
+
+}
+
+
+/* START */
+
+updateStreak();
+
+updateUI();
+
+</script>
+
+</body>
+</html>
